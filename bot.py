@@ -24,7 +24,7 @@ class MyClient(discord.Client):
 
         if message.content.startswith(config['prefix']):
             command = message.content[len(config['prefix']):].split()
-            if command[1] == "reload":
+            if command[0] == "reload":
                 config = config_file.update_config()
 
         if message.author.display_name == nick:
