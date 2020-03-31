@@ -12,7 +12,10 @@ class MyClient(discord.Client):
         for member_id in data:
             member = guild.get_member(int(member_id))
             if member != None and member.display_name != data[member_id]:
-                await member.edit(nick=data[member_id])
+                try:
+                    await member.edit(nick=data[member_id])
+                except discord.errors.Forbidden:
+                    print("Error restoring {0}.".format(data[member_id]))
 
         sys.exit(0)
 
