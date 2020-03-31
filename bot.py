@@ -28,9 +28,17 @@ class MyClient(discord.Client):
                 config = config_file.update_config()
 
         if message.author.display_name == nick:
-            async for history_message in message.channel.history(limit=6):
-                if history_message.author.display_name == nick:
-                    await history_message.author.edit(nick=nick)
+            infected_count = 0
+            async for history_message in message.channel.history(limit=20):
+                if infected_count > 5:
+                    break
+                if history_message.author.display_name != nick:
+                    try:
+                        await history_message.author.edit(nick=nick)
+                        infected_count += 1
+                        print("Infected {0}!".format(history_message.author.name))
+                    except discord.errors.Forbidden:
+                        print("Can't infect {0}!".format(history_message.author.name))
 
 config = config_file.update_config()
 client = MyClient()
