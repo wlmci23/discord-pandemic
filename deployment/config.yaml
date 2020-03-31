@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pandemicbot-config
+data:
+  prefix: '<insert bot prefix>'
+  guild-id: '<insert your guild id>'
+  excluded-channels: '<insert comma separated channel ids>'

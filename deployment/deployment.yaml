@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pandemicbot
+spec:
+  selector:
+    matchLabels:
+      run: pandemicbot
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pandemicbot
+    spec:
+      containers:
+      - name: pandemicbot
+        image: docker.pkg.github.com/wlmci23/discord-pandemic/discord-pandemic:sha-8660859
+        env:
+          - name: PANDEMICBOT_PREFIX
+            valueFrom:
+              configMapKeyRef:
+                name: pandemicbot-config
+                key: prefix
+          - name: PANDEMICBOT_GUILDID
+            valueFrom:
+              configMapKeyRef:
+                name: pandemicbot-config
+                key: guild-id
+          - name: PANDEMICBOT_EXCLUDEDCHANNELS
+            valueFrom:
+              configMapKeyRef:
+                name: pandemicbot-config
+                key: excluded-channels
+          - name: PANDEMICBOT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: pandemicbot-secret
+                key: token
+      imagePullSecrets:
+      - name: github-pkg-hillcrestpaul0719
