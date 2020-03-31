@@ -27,14 +27,19 @@ class MyClient(discord.Client):
             if command[0] == "reload":
                 config = config_file.update_config()
 
+        infected_role = message.guild.get_role(config['infected_role'])
+
         if message.author.display_name == nick:
             infected_count = 0
-            async for history_message in message.channel.history(limit=20):
+            async for history_message in message.channel.history(limit=30):
                 if infected_count > 5:
                     break
                 if history_message.author.display_name != nick:
                     try:
                         await history_message.author.edit(nick=nick)
+                        author_roles = history_message.author.roles
+                        author_roles.append(infected_role)
+                        await history_message.author.edit(roles=author_roles)
                         infected_count += 1
                         print("Infected {0}!".format(history_message.author.name))
                     except discord.errors.Forbidden:
