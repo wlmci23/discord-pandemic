@@ -9,14 +9,17 @@ class MyClient(discord.Client):
             data = json.loads(input_file.read())
 
         guild = self.get_guild(args.guild_id)
+        count = 0
         for member_id in data:
             member = guild.get_member(int(member_id))
             if member != None and member.display_name != data[member_id]:
+                count += 1
                 try:
                     await member.edit(nick=data[member_id])
                 except discord.errors.Forbidden:
                     print("Error restoring {0}.".format(data[member_id]))
 
+        print("Restored {0} nicknames.".format(count))
         sys.exit(0)
 
 if __name__ == "__main__":
